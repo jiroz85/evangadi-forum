@@ -1,0 +1,17 @@
+{
+  "name": "evangadi-forum",
+  "version": "1.0.0",
+  "description": "Full-stack Evangadi Q&A Forum",
+  "scripts": {
+    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm start",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": ["react", "node", "express", "mysql", "forum"],
+  "author": "",
+  "license": "ISC"
+}

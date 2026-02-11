@@ -9,9 +9,19 @@
     "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "@supabase/supabase-js": "^2.38.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "cors": "^2.8.5"
   },
-  "keywords": ["react", "node", "express", "mysql", "forum"],
+  "keywords": [
+    "react",
+    "node",
+    "express",
+    "mysql",
+    "forum"
+  ],
   "author": "",
   "license": "ISC"
 }

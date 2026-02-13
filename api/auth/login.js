@@ -1,16 +1,11 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const supabase = require("../utils/supabase");
+const cors = require("../utils/cors");
 
 module.exports = async (req, res) => {
-  // Enable CORS
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://evangadi-forum-beige.vercel.app",
-  );
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
+  // Apply CORS middleware
+  cors(req, res, () => {});
 
   if (req.method === "OPTIONS") {
     return res.status(200).end();

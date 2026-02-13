@@ -52,7 +52,12 @@ const QuestionDetail = ({ user }) => {
       await fetchQuestion();
       setAnswer('');
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to post answer');
+      const errorData = err.response?.data?.error;
+      const errorMessage =
+        typeof errorData === "string"
+          ? errorData
+          : errorData?.message || "Failed to post answer";
+      setError(errorMessage);
     } finally {
       setSubmitting(false);
     }

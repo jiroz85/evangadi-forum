@@ -31,7 +31,12 @@ const Login = ({ onLogin }) => {
         navigate("/questions");
       }
     } catch (err) {
-      setError(err.response?.data?.error || "Login failed. Please try again.");
+      const errorData = err.response?.data?.error;
+      const errorMessage =
+        typeof errorData === "string"
+          ? errorData
+          : errorData?.message || "Login failed. Please try again.";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

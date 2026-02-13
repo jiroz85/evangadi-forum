@@ -40,9 +40,12 @@ const Signup = ({ onLogin }) => {
         navigate("/questions");
       }
     } catch (err) {
-      setError(
-        err.response?.data?.error || "Registration failed. Please try again.",
-      );
+      const errorData = err.response?.data?.error;
+      const errorMessage =
+        typeof errorData === "string"
+          ? errorData
+          : errorData?.message || "Registration failed. Please try again.";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

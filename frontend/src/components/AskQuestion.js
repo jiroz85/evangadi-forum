@@ -39,7 +39,12 @@ const AskQuestion = ({ user }) => {
 
       navigate('/questions');
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to post question');
+      const errorData = err.response?.data?.error;
+      const errorMessage =
+        typeof errorData === "string"
+          ? errorData
+          : errorData?.message || "Failed to post question";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

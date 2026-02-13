@@ -1,16 +1,25 @@
 import axios from "axios";
 
-// Create axios instance with Supabase URL
+// Create axios instance pointing to the local backend
 const api = axios.create({
-  baseURL:
-    process.env.REACT_APP_SUPABASE_URL ||
-    "https://hehlmnkaavajndfhetbo.supabase.co",
+  baseURL: "http://localhost:8080", // Your backend server URL
   headers: {
     "Content-Type": "application/json",
-    apikey:
-      process.env.REACT_APP_SUPABASE_ANON_KEY ||
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhlaGxtbmthYXZham5kZmhldGJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5MTcwNjksImV4cCI6MjA4NjQ5MzA2OX0.29cwMEXD2DmqWSDltUQmxtday435Y2qFdIreC3W828g",
   },
 });
+
+// Add a request interceptor to include the auth token in requests
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
 
 export default api;

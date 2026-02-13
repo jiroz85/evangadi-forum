@@ -3,9 +3,7 @@ import axios from "axios";
 // Determine the base URL based on environment variables
 const apiBaseUrl =
   process.env.REACT_APP_API_URL ||
-  (process.env.NODE_ENV === "production"
-    ? "https://evangadi-forum-backend.vercel.app"
-    : "http://localhost:8080");
+  (process.env.NODE_ENV === "production" ? "" : "http://localhost:8080");
 
 // Create axios instance with the appropriate base URL
 const api = axios.create({

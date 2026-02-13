@@ -4,7 +4,11 @@
   "description": "Frontend for Evangadi Q&A Forum",
   "private": true,
   "dependencies": {
+    "@supabase/supabase-js": "^2.95.3",
     "axios": "^1.5.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "jsonwebtoken": "^9.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.15.0"

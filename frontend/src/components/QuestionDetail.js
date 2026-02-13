@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axios';
 
 const QuestionDetail = ({ user }) => {
   const { id } = useParams();
@@ -17,7 +17,7 @@ const QuestionDetail = ({ user }) => {
   const fetchQuestion = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`/api/questions/${id}`, {
+      const response = await api.get(`/api/questions/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -39,7 +39,7 @@ const QuestionDetail = ({ user }) => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`/api/questions/${id}/answers`, 
+      await api.post(`/api/questions/${id}/answers`, 
         { answer },
         {
           headers: {

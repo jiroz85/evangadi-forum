@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 
 const Login = ({ onLogin }) => {
   const [formData, setFormData] = useState({
@@ -24,7 +24,7 @@ const Login = ({ onLogin }) => {
     setError("");
 
     try {
-      const response = await axios.post("/api/auth/login", formData);
+      const response = await api.post("/api/auth/login", formData);
 
       if (response.data.token && response.data.user) {
         onLogin(response.data.user, response.data.token);

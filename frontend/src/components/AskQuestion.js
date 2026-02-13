@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axios';
 
 const AskQuestion = ({ user }) => {
   const [formData, setFormData] = useState({
@@ -31,7 +31,7 @@ const AskQuestion = ({ user }) => {
 
     try {
       const token = localStorage.getItem('token');
-      await axios.post('/api/questions', formData, {
+      await api.post('/api/questions', formData, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

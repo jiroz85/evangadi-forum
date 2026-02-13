@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 
 const Questions = ({ user }) => {
   const [questions, setQuestions] = useState([]);
@@ -14,7 +14,7 @@ const Questions = ({ user }) => {
   const fetchQuestions = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get("/api/questions", {
+      const response = await api.get("/api/questions", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios";
 
 const Signup = ({ onLogin }) => {
   const [formData, setFormData] = useState({
@@ -27,10 +27,10 @@ const Signup = ({ onLogin }) => {
     setError("");
 
     try {
-      const response = await axios.post("/api/auth/register", formData);
+      const response = await api.post("/api/auth/register", formData);
 
       // After successful registration, automatically log the user in
-      const loginResponse = await axios.post("/api/auth/login", {
+      const loginResponse = await api.post("/api/auth/login", {
         email: formData.email,
         password: formData.password,
       });

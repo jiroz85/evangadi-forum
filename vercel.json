@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "framework": null,
   "builds": [
     { "src": "api/**/*.js", "use": "@vercel/node" },
     { "src": "frontend/package.json", "use": "@vercel/static-build", "config": { "distDir": "build" } }

@@ -11,6 +11,8 @@ const PORT = process.env.PORT || 5000;
 // CORS configuration
 const allowedOrigins = [
   "http://localhost:3000",
+  /^\.*\.vercel\.app$/, // Match any subdomain of vercel.app
+  /^https?:\/\/evangadi-forum-.*\.vercel\.app$/, // Match preview deployments
   "https://evangadi-forum-frontend.vercel.app",
   "https://evangadi-forum-beige.vercel.app",
 ];
@@ -19,7 +21,23 @@ const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
+
+    // For development, you might want to allow all origins
+    if (process.env.NODE_ENV === "development") {
+      return callback(null, true);
+    }
+
+    const isAllowed = allowedOrigins.some((allowedOrigin) => {
+      if (typeof allowedOrigin === "string") {
+        return origin === allowedOrigin;
+      } else if (allowedOrigin instanceof RegExp) {
+        return allowedOrigin.test(origin);
+      }
+      return false;
+    });
+
+    if (!isAllowed) {
+      console.warn(`Blocked by CORS: ${origin}`);
       const msg =
         "The CORS policy for this site does not allow access from the specified Origin.";
       return callback(new Error(msg), false);
@@ -27,19 +45,37 @@ const corsOptions = {
     return callback(null, true);
   },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-    "X-Requested-With",
-    "Accept",
-  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: ["*"],
   exposedHeaders: ["Content-Length", "X-Foo", "X-Bar"],
-  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+  optionsSuccessStatus: 200,
+  preflightContinue: false,
 };
 
 // Middleware
 app.use(cors(corsOptions));
+
+// Add CORS headers to all responses
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (
+    allowedOrigins.some((o) =>
+      o instanceof RegExp ? o.test(origin) : o === origin,
+    )
+  ) {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+    );
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    );
+  }
+  next();
+});
 
 // Handle preflight requests
 app.options("*", cors(corsOptions));

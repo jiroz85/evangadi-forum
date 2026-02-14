@@ -14,7 +14,6 @@ const cors = (req, res, next) => {
   if (origin && isOriginAllowed(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   } else if (origin) {
-    // Fallback: allow any vercel.app for preview deployments
     res.setHeader('Access-Control-Allow-Origin', origin);
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');

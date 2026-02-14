@@ -1,6 +1,12 @@
 {
   "version": 2,
   "framework": null,
+  "builds": [
+    { "src": "api/hello.js", "use": "@vercel/node" },
+    { "src": "api/auth/*.js", "use": "@vercel/node" },
+    { "src": "api/questions/*.js", "use": "@vercel/node" },
+    { "src": "api/questions/*/*.js", "use": "@vercel/node" }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",

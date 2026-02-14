@@ -1,6 +1,6 @@
-const supabase = require("../../utils/supabase");
-const { authenticateToken } = require("../../utils/auth");
-const cors = require("../../utils/cors");
+const supabase = require("../../_utils/supabase");
+const { authenticateToken } = require("../../_utils/auth");
+const cors = require("../../_utils/cors");
 
 module.exports = async (req, res) => {
   cors(req, res, () => {});

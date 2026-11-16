@@ -1,64 +1,59 @@
-const supabase = require('../../utils/supabase');
+const supabase = require("../utils/supabase");
+const cors = require("../utils/cors");
 
 module.exports = async (req, res) => {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  cors(req, res, () => {});
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+  // The shared CORS middleware has already completed the preflight response.
+  if (req.method === "OPTIONS") {
+    return;
   }
 
-  if (req.method !== 'GET') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method !== "GET") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const questionId = req.query.id;
-
-    // Get question
-    const { data: questions, error: questionError } = await supabase
-      .from('questions')
-      .select('id, title, description, created_at, users(username)')
-      .eq('id', questionId)
-      .single();
-
-    if (questionError || !questions) {
-      return res.status(404).json({ error: 'Question not found' });
+    const questionId = req.query?.id;
+    if (!questionId) {
+      return res.status(400).json({ error: "Question ID is required" });
     }
 
-    // Get answers
+    const { data: question, error: questionError } = await supabase
+      .from("questions")
+      .select("id, title, description, created_at, users(username)")
+      .eq("id", questionId)
+      .single();
+
+    if (questionError || !question) {
+      return res.status(404).json({ error: "Question not found" });
+    }
+
     const { data: answers, error: answersError } = await supabase
-      .from('answers')
-      .select('id, answer, created_at, users(username)')
-      .eq('question_id', questionId)
-      .order('created_at', { ascending: true });
+      .from("answers")
+      .select("id, answer, created_at, users(username)")
+      .eq("question_id", questionId)
+      .order("created_at", { ascending: true });
 
     if (answersError) throw answersError;
 
-    // Transform data to match expected format
-    const formattedQuestion = {
-      id: questions.id,
-      title: questions.title,
-      description: questions.description,
-      created_at: questions.created_at,
-      username: questions.users.username
-    };
-
-    const formattedAnswers = answers.map(a => ({
-      id: a.id,
-      answer: a.answer,
-      created_at: a.created_at,
-      username: a.users.username
-    }));
-
-    res.json({
-      question: formattedQuestion,
-      answers: formattedAnswers
+    return res.status(200).json({
+      question: {
+        id: question.id,
+        title: question.title,
+        description: question.description,
+        created_at: question.created_at,
+        username: question.users?.username ?? null,
+      },
+      answers: answers.map((answer) => ({
+        id: answer.id,
+        answer: answer.answer,
+        created_at: answer.created_at,
+        username: answer.users?.username ?? null,
+      })),
     });
   } catch (error) {
-    console.error('Get question error:', error);
-    res.status(500).json({ error: 'Server error' });
+    console.error("Get question error:", error);
+    return res.status(500).json({ error: "Server error" });
   }
 };
